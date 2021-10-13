@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  bpa-worker-py:
+    image: rrortega/bpa-worker-py:latest
+    environment:
+      PYTHONWARNINGS: "ignore:Unverified HTTPS request"
+      PYTHONUNBUFFERED: 1
+      JSON_B64: ${JSON_B64}
+      ACTION: ${WOEKER_ACTION}
+    volumes:
+      - ./bpa.py:/srv/bpa.py
