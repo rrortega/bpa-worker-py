@@ -30,4 +30,5 @@ troposphere==2.6.3
 urllib3==1.26.2
 Werkzeug==0.16.1
 wsgi-request-logger==0.4.6
-bs4
+bs4==0.0.1
+rethinkdb==2.4.8

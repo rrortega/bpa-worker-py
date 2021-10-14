@@ -1,12 +1,13 @@
-import base64
 import warnings
 import requests
 import bs4
 import json
-import os
+
+__all__ = ['crawbpa']
+
 # pip install pysocks
 # pip3 install --user 'requests[socks]'
-class BpaCrawler:
+class crawbpa:
     def __init__(self, params, proxies):
         super().__init__()
         self.ssn = requests.Session()
@@ -115,43 +116,3 @@ class BpaCrawler:
                 return {  'msg': r['ERROR'] }
         return {  'msg': 'Error actualizando limites'   }
 
-if __name__ == '__main__':
-    token=os.environ['JSON_B64'].strip()
-    params = json.loads(str(base64.b64decode(token), "utf-8").replace('_NH_','Ñ'))
-#     proxies={
-#          'http': 'socks5://localhost:1040',
-#          'https': 'socks5://localhost:1040',
-#     }
-    bc = BpaCrawler( params, None )
-
-    action = 'sync'
-    if os.environ.get('ACTION'):
-        action = os.environ['ACTION'].strip()
-
-
-    if action == 'healthcheck' or action == 'health_check' or action == 'ping':
-        print(bc.health_check())
-
-    if action == 'lockup':
-        print(bc.holder_lockup(os.environ['account'].strip()))
-
-
-    if action == 'sync':
-        print(bc.get_accounts())
-
-    if action == 'upgrade_limits':
-        amount = os.environ['AMOUNT'].strip()
-        limits = json.dumps(bc.update_limits(amount))
-        print(limits)
-
-#     if action == 'upgrade_limits':
-#         amount = os.environ['AMOUNT'].strip()
-#         limits = json.dumps(bc.update_limits(amount))
-#         print(limits)
-#     if action == 'transfer':
-#         account = os.environ['ACCOUNT'].strip()
-#         amount = os.environ['AMOUNT'].strip()
-#         response=json.dumps(bc.transfer(account, amount))
-#         print(response)
-
-#
