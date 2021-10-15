@@ -12,7 +12,13 @@ if __name__ == '__main__':
     exchange = ps.Exchange('pupsub', db=dbname, host=dbhost)
     topic_bpa = exchange.topic('crawler.bpa')
     topic_response = exchange.topic('crawler.callback')
+
+    # con = r.connect(dbhost, 28015).repl()
+    # list = r.db('remesita').table('pupsub').run(con)
+    # for i in list:
+    #     print(dict(i))
     #
+    # #
     # # escuchar una cola
     filter_func = lambda topic: topic.match(r'crawler\.bpa')
     queue = exchange.queue(filter_func)
@@ -27,35 +33,40 @@ if __name__ == '__main__':
         #          'http': 'socks5://localhost:1040',
         #          'https': 'socks5://localhost:1040',
         #     }
+        print("Action: {0}, Cid: {1}".format(action, cid))
+        try:
+            crw = crawbpa(params, None)
 
-        crw = crawbpa(params, None)
-
-        if action == 'healthcheck' or action == 'health_check' or action == 'ping':
-            payload = crw.health_check()
-            print(payload)
-            topic_response.publish({
-                "cid": cid,
-                "data": payload
-            })
-        if action == 'lockup':
-            payload = crw.holder_lockup(data['account'].strip())
-            print(payload)
-            topic_response.publish({
-                "cid": cid,
-                "data": payload
-            })
-        if action == 'sync':
-            payload = crw.get_accounts()
-            print(payload)
-            topic_response.publish({
-                "cid": cid,
-                "data": payload
-            })
-        if action == 'upgrade_limits':
-            amount = data['account'].strip()
-            payload = json.dumps(crw.update_limits(amount))
-            print(payload)
-            topic_response.publish({
-                "cid": cid,
-                "data": payload
-            })
+            if action == 'healthcheck' or action == 'health_check' or action == 'ping':
+                payload = crw.health_check()
+                print(payload)
+                topic_response.publish({
+                    "cid": cid,
+                    "data": payload
+                })
+            if action == 'lockup':
+                payload = crw.holder_lockup(data['account'].strip())
+                print(payload)
+                topic_response.publish({
+                    "cid": cid,
+                    "data": payload
+                })
+            if action == 'sync':
+                payload = crw.get_accounts()
+                print(payload)
+                topic_response.publish({
+                    "cid": cid,
+                    "data": payload
+                })
+            if action == 'upgrade_limits':
+                amount = data['account'].strip()
+                payload = json.dumps(crw.update_limits(amount))
+                print(payload)
+                topic_response.publish({
+                    "cid": cid,
+                    "data": payload
+                })
+        except Exception as e:
+            print('INTERNAL ERROR!!!!')
+            print(e)
+            # TODO: reencolar con 3 intentos maximo, luego responder que dio error

@@ -1,6 +1,5 @@
 import warnings
 import requests
-import bs4
 import json
 
 __all__ = ['crawbpa']
