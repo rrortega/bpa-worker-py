@@ -1,5 +1,5 @@
 #!/bin/sh
-
+source .env
 # Take from https://stackoverflow.com/a/3278427/3384529
 git fetch
 
