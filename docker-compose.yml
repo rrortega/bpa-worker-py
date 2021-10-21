@@ -6,8 +6,6 @@ services:
     environment:
       PYTHONWARNINGS: "ignore:Unverified HTTPS request"
       PYTHONUNBUFFERED: 1
-      JSON_B64: ${JSON_B64}
-      ACTION: ${WOEKER_ACTION}
       RETHINKDB_HOST: '143.198.39.8'
       RETHINKDB_DATABASE: 'remesita'
       RETHINKDB_PASSWORD: 'L4cl4v3*RethinkDb'
